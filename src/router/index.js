@@ -1,7 +1,11 @@
-// eslint-disable-next-line no-unused-vars
-import { createRouter, createWebHistory } from 'vue-router';
+// import { createRouter, createWebHistory } from 'vue-router';
+import { createRouter, createWebHashHistory } from 'vue-router';
 
 const routes = [
+  {
+    path: '/',
+    redirect: { name: 'Intro' },
+  },
   {
     path: '/login',
     name: 'Login',
@@ -14,8 +18,12 @@ const routes = [
   },
 ];
 
+// const router = createRouter({
+//   history: createWebHistory(process.env.BASE_URL),
+//   routes,
+// });
 const router = createRouter({
-  // history: createWebHistory(process.env.BASE_URL),
+  history: createWebHashHistory(),
   routes,
 });
 
