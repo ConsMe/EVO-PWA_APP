@@ -55,6 +55,7 @@ export default {
         y: e.y,
       };
       document.addEventListener('mousemove', this.move);
+      document.addEventListener('touchmove', this.move);
       document.addEventListener('mouseup', this.stopSelect);
       this.move(e);
     },
@@ -81,6 +82,7 @@ export default {
     },
     stopSelect() {
       document.removeEventListener('mousemove', this.move);
+      document.removeEventListener('touchmove', this.move);
       document.removeEventListener('mouseup', this.stopSelect);
     },
   },
