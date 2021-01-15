@@ -1,18 +1,18 @@
 <template>
-  <div class="flex justify-center">
-    <div class="h-44 w-44 inline-block relative">
+  <div class="flex justify-center common">
+    <div
+      class="h-44 w-44 inline-block relative"
+      @mousedown.prevent="startSelect"
+      @touchstart="startSelect"
+      >
       <div
         class="absolute w-full h-full rounded-full inline-block
           left-0 right-0 top-0 bottom-0 circle"
-        @mousedown.prevent="startSelect"
-        @touchstart="startSelect"
       ></div>
       <div
         class="absolute w-full h-full rounded-full inline-block
           left-0 right-0 top-0 bottom-0 selected"
         :style="`clip-path: polygon(${clipPath});`"
-        @mousedown.prevent="startSelect"
-        @touchstart="startSelect"
       ></div>
       <div
         class="absolute w-34 h-34 rounded-full inline-block m-auto
@@ -112,6 +112,9 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+.common {
+  touch-action: none;
+}
 .circle {
   background: conic-gradient(
     from 180deg at 50% 50%,
@@ -122,7 +125,6 @@ export default {
     #f8dee0 244.9deg,
     #ada9f3 360deg
   );
-  touch-action: none;
 }
 .inner {
   background: linear-gradient(274.35deg, #eff6ff 3.77%, #fefeff 93.34%);
@@ -138,7 +140,5 @@ export default {
     #efc5c8 272.46deg,
     #a7a4e4 360deg
   );
-  touch-action: none;
-  // transform: matrix(-1, 0, 0, 1, 0, 0);
 }
 </style>
