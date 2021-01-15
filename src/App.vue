@@ -1,30 +1,57 @@
 <template>
-  <div id="nav">
-    <router-link to="/">Home</router-link> |
-    <router-link to="/about">About</router-link>
+  <div class="wrapper flex justify-center w-full">
+    <div
+      class="flex justify-center"
+      :class="{ 'bg-main': $route.name !== 'Login' }">
+      <router-view />
+    </div>
   </div>
-  <router-view/>
 </template>
 
+<script>
+import 'tailwindcss/tailwind.css';
+import '@/assets/style/styles.css';
+
+export default {
+  mounted() {
+    window.addEventListener('mouseup', () => {
+      this.$store.commit('toggleTapTrigger');
+    });
+  },
+};
+</script>
+
 <style lang="scss">
-#app {
-  font-family: Avenir, Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  text-align: center;
-  color: #2c3e50;
+@font-face {
+  font-family: "Gilroy";
+  src: url("./assets/fonts/Gilroy-Light.otf");
+  font-weight: 300;
 }
-
-#nav {
-  padding: 30px;
-
-  a {
-    font-weight: bold;
-    color: #2c3e50;
-
-    &.router-link-exact-active {
-      color: #42b983;
-    }
-  }
+@font-face {
+  font-family: "Gilroy";
+  src: url("./assets/fonts/Gilroy-Regular.otf");
+  font-weight: normal;
+}
+@font-face {
+  font-family: "Gilroy";
+  src: url("./assets/fonts/Gilroy-Medium.otf");
+  font-weight: 500;
+}
+@font-face {
+  font-family: "Gilroy";
+  src: url("./assets/fonts/Gilroy-Semibold.otf");
+  font-weight: 600;
+}
+html {
+  font-size: 16px;
+  font-family: Gilroy;
+  font-weight: normal;
+}
+.wrapper > div {
+  width: 100%;
+  max-width: 375px;
+}
+.bg-main {
+  background: linear-gradient(298.87deg, #F2F3FB 15.39%, #F8F9FC 84.02%);
 }
 </style>

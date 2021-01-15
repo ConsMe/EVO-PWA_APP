@@ -4,12 +4,18 @@
   "private": true,
   "scripts": {
     "serve": "vue-cli-service serve",
-    "build": "vue-cli-service build",
+    "build": "rm -rf ./dist/js && rm -rf ./dist/css && rm -rf ./dist/img && vue-cli-service build --no-clean",
     "lint": "vue-cli-service lint"
   },
   "dependencies": {
+    "@tailwindcss/postcss7-compat": "^2.0.2",
+    "autoprefixer": "^9.8.6",
     "core-js": "^3.6.5",
+    "jquery": "^3.5.1",
+    "postcss": "^7.0.35",
     "register-service-worker": "^1.7.1",
+    "round-slider": "^1.6.1",
+    "tailwindcss": "npm:@tailwindcss/postcss7-compat@^2.0.2",
     "vue": "^3.0.0",
     "vue-router": "^4.0.0-0",
     "vuex": "^4.0.0-0"
@@ -29,6 +35,7 @@
     "eslint-plugin-vue": "^7.0.0-0",
     "lint-staged": "^9.5.0",
     "node-sass": "^4.12.0",
+    "postcss-load-config": "^3.0.0",
     "sass-loader": "^8.0.2"
   },
   "eslintConfig": {
