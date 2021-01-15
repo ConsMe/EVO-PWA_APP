@@ -5,12 +5,14 @@
         class="absolute w-full h-full rounded-full inline-block
           left-0 right-0 top-0 bottom-0 circle"
         @mousedown.prevent="startSelect"
+        @touchstart="startSelect"
       ></div>
       <div
         class="absolute w-full h-full rounded-full inline-block
           left-0 right-0 top-0 bottom-0 selected"
         :style="`clip-path: polygon(${clipPath});`"
         @mousedown.prevent="startSelect"
+        @touchstart="startSelect"
       ></div>
       <div
         class="absolute w-34 h-34 rounded-full inline-block m-auto
@@ -50,20 +52,39 @@ export default {
         y: rect.top + rect.height / 2,
       };
       this.rect = rect;
-      this.start = {
-        x: e.x,
-        y: e.y,
-      };
+      if (e.type === 'touchstart') {
+        const touch = e.touches[0] || e.changedTouches[0];
+        this.start = {
+          x: touch.screenX,
+          y: touch.screenY,
+        };
+      } else if (e.type === 'mousedown') {
+        this.start = {
+          x: e.x,
+          y: e.y,
+        };
+      }
       document.addEventListener('mousemove', this.move);
       document.addEventListener('touchmove', this.move);
       document.addEventListener('mouseup', this.stopSelect);
+      document.addEventListener('touchend', this.stopSelect);
       this.move(e);
     },
-    move(ev) {
+    move(e) {
+      let x;
+      let y;
+      if (e.type === 'touchstart' || e.type === 'touchmove') {
+        const touch = e.touches[0] || e.changedTouches[0];
+        x = touch.clientX;
+        y = touch.clientY;
+      } else if (e.type === 'mousedown' || e.type === 'mousemove') {
+        x = e.clientX;
+        y = e.clientY;
+      }
       const { rect } = this;
       const vec = {
-        x: ev.x - rect.center.x,
-        y: rect.center.y - ev.y,
+        x: x - rect.center.x,
+        y: rect.center.y - y,
       };
       const cos = (rect.vec.x * vec.x + rect.vec.y * vec.y)
         / (Math.sqrt(rect.vec.x ** 2 + rect.vec.y ** 2) * Math.sqrt(vec.x ** 2 + vec.y ** 2));
@@ -84,6 +105,7 @@ export default {
       document.removeEventListener('mousemove', this.move);
       document.removeEventListener('touchmove', this.move);
       document.removeEventListener('mouseup', this.stopSelect);
+      document.removeEventListener('touchend', this.stopSelect);
     },
   },
 };
