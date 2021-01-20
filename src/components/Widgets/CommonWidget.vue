@@ -1,14 +1,15 @@
 <template>
   <div
-    class="w-full bg-white p-4 rounded-xl text-left flex flex-wrap content-between my-2"
+    class="w-full bg-white p-4 rounded-xl text-left flex
+      flex-wrap content-between my-2 dark:bg-23354"
     :class="{ 'min-h-40': type !== 'range' }">
     <div class="grid grid-flow-col auto-cols-auto gap-x-4 justify-between w-full">
       <div class=" tracking-0.5">
-        <p class="font-semibold text-sm text-284 leading-4.07 mb-1">
+        <p class="font-semibold text-sm text-284 dark:text-c8d leading-4.07 mb-1">
           {{ name }}
         </p>
         <p class=" font-medium text-smaller text-829 leading-4">
-          {{ place }}
+          {{ group }}
         </p>
       </div>
       <div>
@@ -27,7 +28,10 @@
           :class="isActive ? 'text-569' : 'text-d6e'">
           Открыто
         </span>
-        <span v-else class="font-light text-2xl text-284 leading-none w-10 self-center text-center">
+        <span
+          v-else
+          class="font-light text-2xl text-284 leading-none w-10 self-center
+            text-center dark:text-c8d">
           {{ value }}
         </span>
         <div
@@ -40,14 +44,25 @@
         </div>
       </div>
       <div v-else-if="type === 'dimmer'">
-        <dimmer />
+        <dimmer
+          @change="$emit('changeValue', $event)" />
+      </div>
+      <div v-else-if="type === 'color'">
+        <color-picker
+          :valueInit="value"
+          :isActive="isActive"
+          :colorInit="color"
+          @change="$emit('changeValue', $event)"
+          @toggle="$emit('toggleActive', $event)"
+          @pick="$emit('changeColor', $event)"
+           />
       </div>
       <div v-else class=" flex items-end">
         <img
           v-if="type === 'degrees'"
           src="@/assets/img/degrees.svg"
           class="w-4 mr-3 inline-block">
-        <span class="font-light text-2xl text-284 leading-none">
+        <span class="font-light text-2xl text-284 leading-none dark:text-c8d">
           {{ value }}
         </span>
       </div>
@@ -60,14 +75,17 @@ import FavouriteImage from './FavouriteImage.vue';
 import Switcher from '../Switcher.vue';
 import InputRange from '../InputRange.vue';
 import Dimmer from '../Dimmer.vue';
+import ColorPicker from '../ColorPicker.vue';
 
 export default {
-  props: ['name', 'place', 'isActive', 'isFavourite', 'type', 'value'],
+  name: 'CommonWidget',
+  props: ['name', 'group', 'isActive', 'isFavourite', 'type', 'value', 'color'],
   components: {
     FavouriteImage,
     Switcher,
     InputRange,
     Dimmer,
+    ColorPicker,
   },
   watch: {
     value(value) {

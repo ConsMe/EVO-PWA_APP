@@ -57,10 +57,12 @@
 
 <script>
 export default {
-  props: ['isVisible', 'isError'],
+  name: 'VisibilityImage',
+  props: ['isVisible', 'isError', 'isPasswordFocus', 'password'],
   computed: {
     color() {
-      return this.isError ? 'text-5860' : 'text-829';
+      if (this.isError) return 'text-5860';
+      return this.isPasswordFocus || this.password.length ? 'text-284' : 'text-829';
     },
   },
 };

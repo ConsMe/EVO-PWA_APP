@@ -1,5 +1,5 @@
 <template>
-  <div class="w-5/6 text-center font-medium self-center my-14">
+  <div class="w-5/6 text-center font-medium self-center">
     <img src="@/assets/img/EVO_Logo.svg" class="w-12 inline-block mb-14">
     <p class="text-xl text-829 mb-10">
       Введите логин и пароль
@@ -8,7 +8,7 @@
       <input
         type="text"
         placeholder="Логин"
-        class="mb-6 input-field"
+        class="mb-6 input-field dark:bg-1b2 rounded-none"
         :class="[getColor('login')]"
         v-model="login"
         required>
@@ -16,14 +16,21 @@
         <input
           :type="isPasswordVisible ? 'text' : 'password'"
           placeholder="Пароль"
-          class="input-field"
+          class="input-field dark:bg-1b2 rounded-none"
           :class="[getColor('password')]"
           v-model="password"
+          @focus="isPasswordFocus = true"
+          @blur="isPasswordFocus = false"
           required>
         <span
           class=" absolute right-2 h-6 top-0 bottom-0 my-auto"
           @click="isPasswordVisible = !isPasswordVisible">
-          <visibility-image :isVisible="isPasswordVisible" :isError="isError" class=" h-full" />
+          <visibility-image
+            :isVisible="isPasswordVisible"
+            :isError="isError"
+            :isPasswordFocus="isPasswordFocus"
+            :password="password"
+            class=" h-full" />
         </span>
       </div>
       <p class="text-5860 text-sm flex items-end mt-2" :class="{ invisible: !isError }">
@@ -32,13 +39,14 @@
           Ошибка входа. Проверьте логин и пароль.
         </span>
       </p>
-      <button class="w-full h-14 text-white mt-5 font-semibold">
+      <button
+        class="w-full h-14 text-white mt-5 font-semibold button-gradient active:outline-none">
         Войти
         <img src="@/assets/img/arrow-right.svg" class=" inline-block h-6">
       </button>
       <label class="flex items-end mt-5">
         <input type="checkbox" class="form-checkbox">
-        <span class="ml-2 text-sm text-284 leading-none">Запомнить</span>
+        <span class="ml-2 text-sm text-284 dark:text-c8d leading-none">Запомнить</span>
       </label>
     </form>
   </div>
@@ -54,11 +62,13 @@ export default {
       login: '',
       password: '',
       isPasswordVisible: false,
-      isError: true,
+      isError: false,
+      isPasswordFocus: false,
     };
   },
   computed: {
     logPass() { return `${this.login}${this.password}`; },
+    isDarkTheme() { return this.$store.state.isDarkTheme; },
   },
   watch: {
     logPass() { this.isError = false; },
@@ -66,8 +76,8 @@ export default {
   methods: {
     getColor(type) {
       if (this.isError) return 'border-5860 error';
-      if (this[type].length) return 'border-284';
-      return 'border-829';
+      if (this[type].length) return 'border-284 dark:border-c8d';
+      return 'border-829 focus:border-284 dark:focus:border-c8d';
     },
   },
 };
@@ -75,7 +85,7 @@ export default {
 
 <style lang="postcss" scoped>
 .input-field {
-  @apply text-lg text-284 placeholder-829 font-medium font-gilroy block w-full
+  @apply text-lg text-284 dark:text-c8d placeholder-829 font-medium font-gilroy block w-full
   outline-none py-3.5 border-b-2 transition;
 }
 .input-field.error {
@@ -93,12 +103,6 @@ export default {
 .input-field.error:-webkit-autofill::first-line {
   @apply text-5860;
 }
-button {
-  background: linear-gradient(
-    180deg, #4A9EFE -28.21%, #3C77D6 132.18%, #6AA3FC 135.9%, #6AA3FC 135.9%
-  );
-  border-radius: 0.625rem;
-}
 .form-checkbox {
   appearance: none;
   -webkit-print-color-adjust: exact;
@@ -111,10 +115,13 @@ button {
   height: 1rem;
   width: 1rem;
   color: #2563eb;
-  background-color: #fff;
+  background-color: transparent;
   border-width: 1px;
   border-radius: 0.1875rem;
   @apply border-284 outline-none;
+  .dark & {
+    border-color: #C8DAF2;
+  }
 }
 .form-checkbox:checked {
   position: relative;
@@ -123,6 +130,10 @@ button {
                     linear-gradient(to bottom, #51A2FF, #316ED0);
   background-origin: border-box;
   background-clip: content-box, border-box;
+  .dark & {
+    background-image: linear-gradient(#1B2A40, #1B2A40),
+                    linear-gradient(to bottom, #51A2FF, #316ED0);
+  }
 }
 .form-checkbox:checked::after {
   position: absolute;

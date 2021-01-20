@@ -4,11 +4,13 @@
     @click="toggleActive = !toggleActive"
   >
     <div
-      class="w-11 h-6 flex items-center bg-gray-300 rounded-full p-1 duration-300 ease-in-out mr-2"
+      class="w-11 h-6 flex items-center bg-gray-300 dark:bg-41587 rounded-full
+        p-1 duration-300 ease-in-out mr-2"
       :class="{ 'bg-blue-gradient': toggleActive }"
     >
       <div
-        class="bg-white w-1.125 h-1.125 rounded-full shadow-md transform duration-300 ease-in-out"
+        class="bg-white dark:bg-23354 w-1.125 h-1.125 rounded-full shadow-md
+          transform duration-300 ease-in-out"
         :class="{ 'translate-x-1.125': toggleActive }"
       ></div>
     </div>
@@ -17,6 +19,7 @@
 
 <script>
 export default {
+  name: 'Switcher',
   props: ['isActive'],
   data() {
     return {

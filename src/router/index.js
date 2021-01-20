@@ -10,11 +10,33 @@ const routes = [
     path: '/login',
     name: 'Login',
     component: () => import('../views/Login.vue'),
+    meta: {
+      title: 'Авторизация',
+    },
   },
   {
     path: '/intro',
     name: 'Intro',
     component: () => import('../views/Intro.vue'),
+    meta: {
+      title: 'Информация',
+    },
+  },
+  {
+    path: '/groups',
+    name: 'Groups',
+    component: () => import('../views/Panel.vue'),
+    meta: {
+      title: 'Панель управления | Все устройства',
+    },
+  },
+  {
+    path: '/favourites',
+    name: 'Favourites',
+    component: () => import('../views/Panel.vue'),
+    meta: {
+      title: 'Панель управления | Избранное',
+    },
   },
 ];
 

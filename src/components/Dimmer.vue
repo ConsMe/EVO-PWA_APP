@@ -1,9 +1,10 @@
 <template>
   <div class="flex justify-center common">
     <div
-      class="h-44 w-44 inline-block relative"
+      class="h-44 w-44 flex relative justify-center items-center"
       @mousedown.prevent="startSelect"
       @touchstart="startSelect"
+      @contextmenu.prevent.stop
       >
       <div
         class="absolute w-full h-full rounded-full inline-block
@@ -12,18 +13,43 @@
       <div
         class="absolute w-full h-full rounded-full inline-block
           left-0 right-0 top-0 bottom-0 selected"
-        :style="`clip-path: polygon(${clipPath});`"
+        :style="{
+          '-webkit-clip-path': `polygon(${clipPath})`,
+          'clip-path': `polygon(${clipPath})`,
+        }"
       ></div>
       <div
         class="absolute w-34 h-34 rounded-full inline-block m-auto
           left-0 right-0 top-0 bottom-0 inner"
+        :style="`transform: rotate(${pointRotate + 15}deg)`"
       ></div>
+      <div
+        class=" absolute flex justify-left w-30"
+        :style="`transform: rotate(${pointRotate}deg)`">
+        <point-image class="w-1" />
+      </div>
+      <div class="z-10 font-light text-2.375 text-284 dark:text-c8d">
+        {{ `${value}°` }}
+      </div>
+      <div class=" font-normal absolute right-full top-3/4 text-608 dark:text-688">
+        {{ `${min}°` }}
+      </div>
+      <div class=" font-normal absolute left-full top-3/4 text-dc7 dark:text-e172">
+        {{ `${max}°` }}
+      </div>
     </div>
   </div>
 </template>
 
 <script>
+import PointImage from './PointImage.vue';
+
 export default {
+  name: 'Dimmer',
+  props: ['valueInit', 'disabled'],
+  components: {
+    PointImage,
+  },
   data() {
     return {
       rect: {},
@@ -31,13 +57,31 @@ export default {
       isMoving: false,
       clipPath: '0% 0%',
       radiansK: 180 / Math.PI,
+      pointRotate: -45,
+      value: 0,
+      min: 16,
+      max: 28,
+      valueByDegree: 0,
     };
+  },
+  created() {
+    this.value = this.valueInit;
+    this.valueByDegree = (this.max - this.min) / 270;
+  },
+  mounted() {
+    if (this.valueInit !== undefined) this.value = this.valueInit;
   },
   computed: {
     tapTrigger() { return this.$store.state.tapTrigger; },
   },
+  watch: {
+    value(nv, ov) {
+      if (ov !== undefined) this.$emit('change', parseInt(nv, 10));
+    },
+  },
   methods: {
     startSelect(e) {
+      if (this.disabled) return;
       this.stopSelect();
       const el = e.target;
       const rect = el.getBoundingClientRect();
@@ -90,16 +134,23 @@ export default {
         / (Math.sqrt(rect.vec.x ** 2 + rect.vec.y ** 2) * Math.sqrt(vec.x ** 2 + vec.y ** 2));
       let angle = Math.acos(cos) * this.radiansK;
       if (vec.x > vec.y) angle = 360 - angle;
+      if (angle > 320) {
+        angle = 0;
+      } else if (angle > 270) {
+        angle = 270;
+      }
       if (angle < 90) {
         const p = 100 - (angle * 100) / 90;
         this.clipPath = `50% 50%, 0% 100%, 0% ${p}%`;
       } else if (angle < 180) {
         const p = ((angle - 90) * 100) / 90;
         this.clipPath = `50% 50%, 0% 100%, 0% 0%, ${p}% 0%`;
-      } else if (angle < 270) {
+      } else if (angle <= 270) {
         const p = ((angle - 180) * 100) / 90;
         this.clipPath = `50% 50%, 0% 100%, 0% 0%, 100% 0%, 100% ${p}%`;
       }
+      this.value = Math.round(angle * this.valueByDegree) + this.min;
+      this.pointRotate = -45 + angle;
     },
     stopSelect() {
       document.removeEventListener('mousemove', this.move);
@@ -115,8 +166,7 @@ export default {
 .common {
   touch-action: none;
 }
-.circle {
-  background: conic-gradient(
+$bg-circle: conic-gradient(
     from 180deg at 50% 50%,
     #ada9f3 0deg,
     #cae7f5 144.6deg,
@@ -125,11 +175,36 @@ export default {
     #f8dee0 244.9deg,
     #ada9f3 360deg
   );
+.circle {
+  background: $bg-circle;
+  opacity: 0.66;
+  @supports not(background: $bg-circle) {
+    background: 0 0 / 100% 100% url('/img/dimmer/circle-light.png');
+    opacity: 1;
+  }
+  .dark & {
+    background: conic-gradient(
+      from 180deg at 50% 50%,
+      #28264F 0deg,
+      #7ED5FF 139.82deg,
+      #FDC4A4 172.15deg,
+      #FFB099 211.88deg,
+      #FB949C 244.9deg,
+      #28264F 360deg
+    );
+    @supports not(background: $bg-circle) {
+      background: 0 0 / 100% 100% url('/img/dimmer/circle-dark.png');
+    }
+  }
 }
 .inner {
   background: linear-gradient(274.35deg, #eff6ff 3.77%, #fefeff 93.34%);
+  .dark & {
+    background: linear-gradient(231.55deg, #1C2E48 10.12%, #324969 85.1%);
+  }
 }
 .selected {
+  opacity: 0.66;
   background: conic-gradient(
     from 180deg at 50% 50%,
     #a7a4e4 0deg,
@@ -140,5 +215,26 @@ export default {
     #efc5c8 272.46deg,
     #a7a4e4 360deg
   );
+  @supports not(background: $bg-circle) {
+    background: 0 0 / 100% auto url('/img/dimmer/selected-light.png');
+    opacity: 1;
+  }
+  .dark & {
+    opacity: 0.78;
+    background: conic-gradient(
+      from 180deg at 50% 50%,
+      #A7A4E4 0deg,
+      #3D7ED7 62.51deg,
+      #7EE5EB 112.45deg,
+      #FCC2A4 159.26deg,
+      #F38E70 221.94deg,
+      #ED7F87 293.04deg,
+      #A7A4E4 360deg
+    );
+    @supports not(background: $bg-circle) {
+      background: 0 0 / 100% auto url('/img/dimmer/selected-dark.png');
+      opacity: 1;
+    }
+  }
 }
 </style>
