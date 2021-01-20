@@ -1,6 +1,6 @@
 module.exports = {
   productionSourceMap: false,
-  publicPath: 'dist',
+  publicPath: '',
 
   pwa: {
     themeColor: '#4796f6',
