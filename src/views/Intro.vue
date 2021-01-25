@@ -3,7 +3,7 @@
     <div ref="slider" class="swipe">
       <div class="swipe-wrap flex items-center">
         <div class=" w-full">
-          <div class="grid grid-cols-2 gap-x-4 w-full transform scale-75">
+          <div class="grid grid-cols-2 gap-x-4 w-full transform scale-75 relative">
             <common-widget
               v-for="(w, i) in widgets"
               :key="i"
@@ -14,10 +14,17 @@
               @changeColor="widgets[i].color = $event"
               :class="{ 'col-span-2': ['range', 'dimmer', 'color'].includes(w.type) }"
                 />
+            <div class=" absolute top-0 left-0 bottom-0 right-0"></div>
           </div>
         </div>
         <div class=" w-full">
-          <dimmer :valueInit="28" :disabled="true" />
+          <dimmer
+            :realValue="28"
+            :disabled="true"
+            :isActive="true"
+            :min="16"
+            :max="28"
+            :angle="270" />
         </div>
         <div class=" w-full">
           <img v-if="isDarkTheme" src="@/assets/img/intro_slide3-dark.png" class=" w-4/5 m-auto">

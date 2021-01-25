@@ -53,7 +53,7 @@ router.beforeEach((to, from, next) => {
     return;
   }
   const token = store.state.authToken;
-  if (token && ['Login', 'Intro'].includes(to.name)) {
+  if (token && ['Login'].includes(to.name)) {
     next({ name: 'Groups' });
     return;
   }

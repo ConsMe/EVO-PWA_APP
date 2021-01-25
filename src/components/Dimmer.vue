@@ -95,6 +95,9 @@ export default {
   created() {
     this.valueByDegree = (this.max - this.min) / 270;
   },
+  mounted() {
+    if (this.angle !== undefined) this.render(this.angle);
+  },
   methods: {
     startSelect(e) {
       if (this.isMoving) return;

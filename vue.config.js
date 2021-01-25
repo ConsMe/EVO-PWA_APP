@@ -22,7 +22,7 @@ module.exports = {
       androidChrome: 'img/icons/192x192.png',
     },
     name: 'EVO Controller APP',
-    assetsVersion: '0.0.2',
+    assetsVersion: '0.0.3',
   },
 
   devServer: {

@@ -21,7 +21,7 @@
           {{ isDarkTheme ? 'Выключить' : 'Включить' }} темную тему
         </span>
       </div>
-      <div class="m-3 p-3 signout-btn rounded-xl">
+      <div class="m-3 p-3 signout-btn rounded-xl" @click="signOut">
         <signout-image class=" inline-block mr-4 w-6 mb-0.5" />
         <span class=" font-medium text-284 dark:text-c8d leading-none tracking-wide">Выйти</span>
       </div>
@@ -36,10 +36,15 @@ import SignoutImage from './SignoutImage.vue';
 export default {
   name: 'BottomMenu',
   components: { Switcher, SignoutImage },
-
   computed: {
     isBottomMenuOpen() { return this.$store.state.isBottomMenuOpen; },
     isDarkTheme() { return this.$store.state.isDarkTheme; },
+  },
+  methods: {
+    signOut() {
+      this.$router.push({ name: 'Login' });
+      this.$store.commit('signOut');
+    },
   },
 };
 </script>

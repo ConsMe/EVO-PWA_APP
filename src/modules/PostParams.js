@@ -18,7 +18,11 @@ export default class PostParams {
 
   getParams(isController) {
     const params = this[this.type](isController);
-    if (isController) params.params = JSON.stringify(params.params);
+    if (isController) {
+      params.params = JSON.stringify(params.params);
+    } else {
+      params.params.value = params.params.value.toString();
+    }
     return params;
   }
 
