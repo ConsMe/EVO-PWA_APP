@@ -7,13 +7,13 @@
       class="inline-block cursor-pointer bg-white dark:bg-23354 rounded-md px-5
         py-2 mr-3 text-sm"
       :class="
-        activeGroup === group
+        groupId === group.id
           ? 'button-gradient text-white font-semibold'
           : 'text-829 dark:text-c8d font-medium'
       "
-      @click="$emit('setActive', group)"
+      @click="$store.dispatch('setGroupId', { id: group.id, isFavouritePage: false })"
     >
-      {{ group }}
+      {{ group.naim }}
     </span>
     </div>
   </div>
@@ -24,11 +24,14 @@ import ScrollBooster from 'scrollbooster';
 
 export default {
   name: 'Groups',
-  props: ['groups', 'activeGroup'],
   data() {
     return {
       scrollBooster: null,
     };
+  },
+  computed: {
+    groups() { return this.$store.state.groups; },
+    groupId() { return this.$store.state.groupId; },
   },
   mounted() {
     if (!this.isTouchDevice()) {

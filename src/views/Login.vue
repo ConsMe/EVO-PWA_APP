@@ -4,7 +4,7 @@
     <p class="text-xl text-829 mb-10">
       Введите логин и пароль
     </p>
-    <form>
+    <form @submit.prevent="signIn">
       <input
         type="text"
         placeholder="Логин"
@@ -40,14 +40,16 @@
         </span>
       </p>
       <button
-        class="w-full h-14 text-white mt-5 font-semibold button-gradient active:outline-none">
+        class="w-full h-14 text-white mt-5 font-semibold button-gradient active:outline-none"
+        type="submit"
+        :disabled="disabled">
         Войти
         <img src="@/assets/img/arrow-right.svg" class=" inline-block h-6">
       </button>
-      <label class="flex items-end mt-5">
+      <!-- <label class="flex items-end mt-5">
         <input type="checkbox" class="form-checkbox">
         <span class="ml-2 text-sm text-284 dark:text-c8d leading-none">Запомнить</span>
-      </label>
+      </label> -->
     </form>
   </div>
 </template>
@@ -64,6 +66,7 @@ export default {
       isPasswordVisible: false,
       isError: false,
       isPasswordFocus: false,
+      disabled: false,
     };
   },
   computed: {
@@ -78,6 +81,23 @@ export default {
       if (this.isError) return 'border-5860 error';
       if (this[type].length) return 'border-284 dark:border-c8d';
       return 'border-829 focus:border-284 dark:focus:border-c8d';
+    },
+    signIn() {
+      this.isError = false;
+      this.disabled = true;
+      const { login, password } = this;
+      this.$server.post('/', { mode: 'auth', login, password })
+        .then((r) => {
+          if (r.data.result !== 'success') {
+            this.isError = true;
+            return;
+          }
+          this.$store.commit('signIn', r.data.token);
+          this.$router.push({ name: 'Intro' });
+        })
+        .finally(() => {
+          this.disabled = false;
+        });
     },
   },
 };

@@ -27,6 +27,12 @@ module.exports = {
 
   devServer: {
     disableHostCheck: true,
+    proxy: {
+      '^/application_api.php': {
+        target: 'http://app_evo.alpachini.com',
+        changeOrigin: true,
+      },
+    },
   },
 
   transpileDependencies: [

@@ -1,0 +1,48 @@
+export default [
+  {
+    type: 'range',
+    name: 'Длинное название уст-ва',
+    group: 'Группа (помещение)',
+    isActive: true,
+    isFavourite: false,
+    value: 50,
+  },
+  {
+    type: 'switcher',
+    name: 'Название уст-ва на 3 строчки',
+    group: 'Гостиничный номер',
+    isActive: true,
+    isFavourite: false,
+  },
+  {
+    type: 'degrees',
+    name: 'Widget Tap',
+    group: 'Гостиничный номер',
+    value: '50°C',
+    isFavourite: false,
+  },
+  {
+    type: 'string',
+    name: 'Название уст-ва ',
+    group: 'Комната',
+    value: '24%',
+    isFavourite: false,
+  },
+  // {
+  //   type: 'dimmer',
+  //   name: 'Длинное название уст-ва',
+  //   group: 'Группа (помещение)',
+  //   isActive: true,
+  //   isFavourite: false,
+  //   value: 50,
+  // },
+  // {
+  //   type: 'color',
+  //   name: 'Длинное название уст-ва',
+  //   group: 'Группа (помещение)',
+  //   isActive: true,
+  //   isFavourite: false,
+  //   value: 50,
+  //   color: { r: 255, g: 255, b: 255 },
+  // },
+];

@@ -1,11 +1,9 @@
-// import { createRouter, createWebHistory } from 'vue-router';
 import { createRouter, createWebHashHistory } from 'vue-router';
+import store from '@/store/index';
+
+window.testStore = process.env.NODE_ENV === 'development' ? store : null;
 
 const routes = [
-  {
-    path: '/',
-    redirect: { name: 'Intro' },
-  },
   {
     path: '/login',
     name: 'Login',
@@ -47,6 +45,19 @@ const routes = [
 const router = createRouter({
   history: createWebHashHistory(),
   routes,
+});
+
+router.beforeEach((to, from, next) => {
+  if (!to.name) {
+    next({ name: 'Login' });
+    return;
+  }
+  const token = store.state.authToken;
+  if (token && ['Login', 'Intro'].includes(to.name)) {
+    next({ name: 'Groups' });
+    return;
+  }
+  next();
 });
 
 export default router;

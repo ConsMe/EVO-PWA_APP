@@ -1,17 +1,17 @@
 <template>
   <div
     class="inline-flex items-center"
-    @click="toggleActive = !toggleActive"
+    @click="$emit('toggle', !isActive)"
   >
     <div
       class="w-11 h-6 flex items-center bg-gray-300 dark:bg-41587 rounded-full
         p-1 duration-300 ease-in-out mr-2"
-      :class="{ 'bg-blue-gradient': toggleActive }"
+      :class="{ 'bg-blue-gradient': isActive }"
     >
       <div
         class="bg-white dark:bg-23354 w-1.125 h-1.125 rounded-full shadow-md
           transform duration-300 ease-in-out"
-        :class="{ 'translate-x-1.125': toggleActive }"
+        :class="{ 'translate-x-1.125': isActive }"
       ></div>
     </div>
   </div>
@@ -21,19 +21,7 @@
 export default {
   name: 'Switcher',
   props: ['isActive'],
-  data() {
-    return {
-      toggleActive: this.isActive,
-    };
-  },
-  watch: {
-    toggleActive(isActive) {
-      this.$emit('toggle', isActive);
-    },
-    isActive(isActive) {
-      this.toggleActive = isActive;
-    },
-  },
+  emits: ['toggle'],
 };
 </script>
 

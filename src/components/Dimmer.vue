@@ -1,7 +1,8 @@
 <template>
-  <div class="flex justify-center common">
+  <div class="flex justify-center common relative">
     <div
-      class="h-44 w-44 flex relative justify-center items-center"
+      class="h-44 w-44 flex relative justify-center items-center transition-opacity duration-500"
+      :style="isActive ? '' : 'opacity: 0.4;'  "
       @mousedown.prevent="startSelect"
       @touchstart="startSelect"
       @contextmenu.prevent.stop
@@ -29,7 +30,9 @@
         <point-image class="w-1" />
       </div>
       <div class="z-10 font-light text-2.375 text-284 dark:text-c8d">
-        {{ `${value}°` }}
+        <span v-if="isActive">{{ `${value}°` }}</span>
+        <span v-else>{{ `${prevValue}°` }}</span>
+        <!-- {{ `${value}°` }} -->
       </div>
       <div class=" font-normal absolute right-full top-3/4 text-608 dark:text-688">
         {{ `${min}°` }}
@@ -38,6 +41,7 @@
         {{ `${max}°` }}
       </div>
     </div>
+    <div class=" absolute top-0 left-0 w-full h-full z-20" v-if="!isActive"></div>
   </div>
 </template>
 
@@ -46,7 +50,8 @@ import PointImage from './PointImage.vue';
 
 export default {
   name: 'Dimmer',
-  props: ['valueInit', 'disabled'],
+  props: ['realValue', 'prevValue', 'min', 'max', 'indexes', 'angle', 'isActive'],
+  emits: ['change'],
   components: {
     PointImage,
   },
@@ -58,31 +63,43 @@ export default {
       clipPath: '0% 0%',
       radiansK: 180 / Math.PI,
       pointRotate: -45,
-      value: 0,
-      min: 16,
-      max: 28,
       valueByDegree: 0,
     };
   },
-  created() {
-    this.value = this.valueInit;
-    this.valueByDegree = (this.max - this.min) / 270;
-  },
-  mounted() {
-    if (this.valueInit !== undefined) this.value = this.valueInit;
-  },
   computed: {
     tapTrigger() { return this.$store.state.tapTrigger; },
+    value() {
+      if (this.realValue || this.isMoving || !this.prevValue) return this.realValue;
+      return this.prevValue;
+    },
   },
   watch: {
-    value(nv, ov) {
-      if (ov !== undefined) this.$emit('change', parseInt(nv, 10));
+    value(value) {
+      if (this.isMoving) return;
+      let v = value;
+      if (v < this.min) v = this.min;
+      if (v > this.max) v = this.max;
+      const angle = (v - this.min) / this.valueByDegree;
+      this.$store.commit('setWidgetParams', {
+        indexes: this.indexes,
+        angle,
+      });
     },
+    angle(angle) {
+      this.render(angle);
+    },
+    isMoving(isMoving) {
+      if (!isMoving && !this.realValue) this.$emit('toggle', false);
+    },
+  },
+  created() {
+    this.valueByDegree = (this.max - this.min) / 270;
   },
   methods: {
     startSelect(e) {
-      if (this.disabled) return;
+      if (this.isMoving) return;
       this.stopSelect();
+      this.isMoving = true;
       const el = e.target;
       const rect = el.getBoundingClientRect();
       rect.width = el.offsetWidth;
@@ -139,6 +156,19 @@ export default {
       } else if (angle > 270) {
         angle = 270;
       }
+      this.$emit('change', {
+        value: Math.round(angle * this.valueByDegree) + this.min,
+        angle,
+      });
+    },
+    stopSelect() {
+      this.isMoving = false;
+      document.removeEventListener('mousemove', this.move);
+      document.removeEventListener('touchmove', this.move);
+      document.removeEventListener('mouseup', this.stopSelect);
+      document.removeEventListener('touchend', this.stopSelect);
+    },
+    render(angle) {
       if (angle < 90) {
         const p = 100 - (angle * 100) / 90;
         this.clipPath = `50% 50%, 0% 100%, 0% ${p}%`;
@@ -149,14 +179,7 @@ export default {
         const p = ((angle - 180) * 100) / 90;
         this.clipPath = `50% 50%, 0% 100%, 0% 0%, 100% 0%, 100% ${p}%`;
       }
-      this.value = Math.round(angle * this.valueByDegree) + this.min;
       this.pointRotate = -45 + angle;
-    },
-    stopSelect() {
-      document.removeEventListener('mousemove', this.move);
-      document.removeEventListener('touchmove', this.move);
-      document.removeEventListener('mouseup', this.stopSelect);
-      document.removeEventListener('touchend', this.stopSelect);
     },
   },
 };

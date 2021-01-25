@@ -1,5 +1,5 @@
 <template>
-  <div class=" w-full justify-center flex flex-col pb-5">
+  <div class=" w-full justify-start flex flex-col pb-5">
     <panel-header
       name="Константин"
       :temp="40"
@@ -10,10 +10,7 @@
         {{ isFavourites ? 'Избранное' : 'Группы' }}
       </h1>
       <groups
-        v-if="!isFavourites"
-        :groups="groups"
-        :activeGroup="activeGroup"
-        @setActive="activeGroup = $event" />
+        v-if="!isFavourites" />
       <widgets />
     </div>
     <quick-nav />
