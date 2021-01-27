@@ -36,6 +36,14 @@ const routes = [
       title: 'Панель управления | Избранное',
     },
   },
+  {
+    path: '/widget/:id',
+    name: 'SingleWidget',
+    component: () => import('../views/SingleWidget.vue'),
+    meta: {
+      title: 'Панель управления',
+    },
+  },
 ];
 
 // const router = createRouter({

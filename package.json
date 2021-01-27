@@ -4,7 +4,7 @@
   "private": true,
   "scripts": {
     "serve": "vue-cli-service serve",
-    "build": "rm -rf ./dist/js && rm -rf ./dist/css && rm -rf ./dist/img && vue-cli-service build --no-clean",
+    "build": "rm -rf ./dist/js && rm -rf ./dist/css && rm -rf ./dist/img && rm -rf ./dist/precache-manifest.* && vue-cli-service build --no-clean",
     "lint": "vue-cli-service lint"
   },
   "dependencies": {

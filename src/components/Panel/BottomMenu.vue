@@ -36,14 +36,19 @@ import SignoutImage from './SignoutImage.vue';
 export default {
   name: 'BottomMenu',
   components: { Switcher, SignoutImage },
+  data: () => ({
+    disabled: false,
+  }),
   computed: {
     isBottomMenuOpen() { return this.$store.state.isBottomMenuOpen; },
     isDarkTheme() { return this.$store.state.isDarkTheme; },
   },
   methods: {
     signOut() {
-      this.$router.push({ name: 'Login' });
-      this.$store.commit('signOut');
+      if (this.disabled) return;
+      this.disabled = true;
+      localStorage.removeItem('token');
+      window.location.href = '/';
     },
   },
 };

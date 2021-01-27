@@ -58,6 +58,21 @@ html {
     box-shadow: 0px 4px 11px rgba(60, 129, 225, 0.47);
   }
 }
+.button-off-gradient {
+  background: linear-gradient(180deg, #C3D0DE 0%, #ADB6C2 100%);
+  border-radius: 0.625rem;
+  &:active {
+    background: linear-gradient(180deg, #B2C1D2 0%, #8A97AC 100%);
+    box-shadow: 0px 4px 11px rgba(144, 158, 179, 0.58);
+  }
+  .dark & {
+    background: linear-gradient(180deg, #32496A 0%, #2B4161 100%);
+    &:active {
+      background: linear-gradient(180deg, #273D5C 0%, #1D2E48 100%);
+      box-shadow: 0px 4px 11px rgba(26, 42, 63, 0.8);
+    }
+  }
+}
 .fade-enter-active,
 .fade-leave-active {
   transition: opacity 0.15s ease;

@@ -1,7 +1,8 @@
 <template>
   <div class="flex justify-center common relative">
     <div
-      class="h-44 w-44 flex relative justify-center items-center transition-opacity duration-500"
+      class="flex relative justify-center items-center transition-opacity duration-500"
+      :class="isSingle ? 'w-64 h-64' : 'h-44 w-44'"
       :style="isActive ? '' : 'opacity: 0.4;'  "
       @mousedown.prevent="startSelect"
       @touchstart="startSelect"
@@ -20,24 +21,31 @@
         }"
       ></div>
       <div
-        class="absolute w-34 h-34 rounded-full inline-block m-auto
+        class="absolute rounded-full inline-block m-auto
           left-0 right-0 top-0 bottom-0 inner"
+        :class="isSingle ? 'w-51 h-51' : 'h-34 w-34'"
         :style="`transform: rotate(${pointRotate + 15}deg)`"
       ></div>
       <div
         class=" absolute flex justify-left w-30"
+        :class="isSingle ? 'w-46' : 'w-30'"
         :style="`transform: rotate(${pointRotate}deg)`">
-        <point-image class="w-1" />
+        <point-image class="w-1" :class="isSingle ? 'transform scale-125' : ''" />
       </div>
-      <div class="z-10 font-light text-2.375 text-284 dark:text-c8d">
+      <div
+        class="z-10 font-light text-284 dark:text-c8d"
+        :class="isSingle ? 'text-3.5' : 'text-2.375'">
         <span v-if="isActive">{{ `${value}°` }}</span>
         <span v-else>{{ `${prevValue}°` }}</span>
-        <!-- {{ `${value}°` }} -->
       </div>
-      <div class=" font-normal absolute right-full top-3/4 text-608 dark:text-688">
+      <div
+        class=" font-normal absolute right-full top-3/4 text-608 dark:text-688"
+        :class="isSingle ? 'text-xl' : ''">
         {{ `${min}°` }}
       </div>
-      <div class=" font-normal absolute left-full top-3/4 text-dc7 dark:text-e172">
+      <div
+        class=" font-normal absolute left-full top-3/4 text-dc7 dark:text-e172"
+        :class="isSingle ? 'text-xl' : ''">
         {{ `${max}°` }}
       </div>
     </div>
@@ -50,7 +58,7 @@ import PointImage from './PointImage.vue';
 
 export default {
   name: 'Dimmer',
-  props: ['realValue', 'prevValue', 'min', 'max', 'indexes', 'angle', 'isActive'],
+  props: ['realValue', 'prevValue', 'min', 'max', 'indexes', 'angle', 'isActive', 'isSingle'],
   emits: ['change'],
   components: {
     PointImage,

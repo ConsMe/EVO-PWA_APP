@@ -15,7 +15,6 @@
     </div>
     <quick-nav />
     <bottom-menu />
-    <data-flow />
   </div>
 </template>
 
@@ -25,11 +24,10 @@ import Groups from '../components/Panel/Groups.vue';
 import Widgets from '../components/Panel/Widgets.vue';
 import QuickNav from '../components/Panel/QuickNav.vue';
 import BottomMenu from '../components/Panel/BottomMenu.vue';
-import DataFlow from '../components/Panel/DataFlow.vue';
 
 export default {
   components: {
-    PanelHeader, Widgets, Groups, QuickNav, BottomMenu, DataFlow,
+    PanelHeader, Widgets, Groups, QuickNav, BottomMenu,
   },
   data() {
     return {

@@ -8,6 +8,7 @@
         'pb-12': ['Groups', 'Favourites'].includes($route.name),
       }">
       <router-view />
+      <data-flow v-if="['Groups', 'Favourites', 'SingleWidget'].includes($route.name)" />
     </div>
   </div>
 </template>
@@ -15,8 +16,10 @@
 <script>
 import 'tailwindcss/tailwind.css';
 import '@/assets/style/styles.scss';
+import DataFlow from '@/components/Panel/DataFlow.vue';
 
 export default {
+  components: { DataFlow },
   computed: {
     isDarkTheme() { return this.$store.state.isDarkTheme; },
   },

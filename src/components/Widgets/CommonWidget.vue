@@ -4,7 +4,9 @@
       flex-wrap content-between my-2 dark:bg-23354"
     :class="{ 'min-h-40': type !== 'range' }">
     <div class="grid grid-flow-col auto-cols-auto gap-x-4 justify-between w-full">
-      <div class=" tracking-0.5 break-word">
+      <div
+        class=" tracking-0.5 break-word"
+        @click="goToWidget">
         <p class="font-semibold text-sm text-284 dark:text-c8d leading-4.07 mb-1">
           {{ name }}
         </p>
@@ -159,6 +161,16 @@ export default {
       this.$store.commit('setWidgetParams', {
         indexes: this.indexes,
         isActive,
+      });
+    },
+    goToWidget() {
+      if (!['range', 'dimmer'].includes(this.type)) return;
+      this.$router.push({
+        name: 'SingleWidget',
+        params: {
+          id: this.widget_id,
+          // name: `${this.name} (${this.group})`,
+        },
       });
     },
   },

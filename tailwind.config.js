@@ -9,6 +9,7 @@ module.exports = {
       fontSize: {
         smaller: '0.8125rem',
         2.375: '2.375rem',
+        3.5: '3.5rem',
       },
       colors: {
         284: '#284A69',
@@ -24,6 +25,7 @@ module.exports = {
         23354: '#23354F',
         23365: '#233653',
         41587: '#41587B',
+        577095: '#577095',
         '1b2': '#1B2A40',
         c8d: '#C8DAF2',
         d6e: '#D6E3EF',
@@ -37,11 +39,14 @@ module.exports = {
         1.625: '1.625rem',
         2.125: '2.125rem',
         2.875: '2.875rem',
+        3.25: '3.25rem',
+        3.75: '3.75rem',
         3.875: '3.875rem',
         5.75: '5.75rem',
         30: '7.5rem',
         34: '8.5rem',
         46: '11.5rem',
+        51: '12.75rem',
         62: '15.5rem',
       },
       lineHeight: {
@@ -57,6 +62,12 @@ module.exports = {
         width: 'width',
         filter: 'filter',
         bottom: 'bottom',
+      },
+      borderRadius: {
+        625: '0.625rem',
+      },
+      minWidth: {
+        3.25: '3.25rem',
       },
     },
     fontFamily: {
